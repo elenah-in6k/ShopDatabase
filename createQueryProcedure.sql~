@@ -3,8 +3,10 @@ delimiter //
 drop  PROCEDURE selectOrderByCustomerName;//
 CREATE PROCEDURE `selectOrderByCustomerName`(IN paramName varchar(20))
     BEGIN
-select * from orders o, customer c 
-where (o.idCustomer = c.id) and (c.name =paramName);
+select * from orders o
+join customer c 
+on (o.idCustomer = c.id)
+where  (c.name =paramName);
     END//
 
 /* 2 selectProductByOrderId*/
@@ -12,7 +14,10 @@ drop  PROCEDURE selectProductByOrderId;//
 CREATE PROCEDURE `selectProductByOrderId`(IN paramIdOrder INT)
     BEGIN
 select o.idOrder, o.idProduct, p.name, o.QuantityProduct 
-from orderProducts o, product p where (p.id = o.idProduct) and (o.idOrder = paramIdOrder);
+from orderProducts o
+join product p
+on (p.id = o.idProduct)
+ where  (o.idOrder = paramIdOrder);
     END//
 
 /* 3 Top 3*/	
@@ -20,8 +25,9 @@ drop  PROCEDURE `selectTop3ProductInOrderSum`;//
 CREATE PROCEDURE `selectTop3ProductInOrderSum`()
     BEGIN
 SELECT  o.idProduct, p.name, sum(o.QuantityProduct) as qty
-FROM orderProducts o, product p
-where o.idProduct = p.id
+FROM orderProducts o
+join product p
+on o.idProduct = p.id
 GROUP BY o.idProduct
 ORDER BY sum(o.QuantityProduct) desc
 LIMIT 3;
@@ -42,7 +48,7 @@ LIMIT 3;
 drop PROCEDURE `selectProductByCategory`;//
 CREATE PROCEDURE `selectProductByCategory`(IN paramName varchar(20))
     BEGIN
-select p.name, c.name
+select p.name as product_name, c.name as category_name
 from product p
 left Join category c
 on p.idCategory = c.id
@@ -56,8 +62,11 @@ CREATE PROCEDURE `selectPopularProductInEachCategory`()
 select * 
 from(
 SELECT p.id as idProduct, p.name as nameProduct, sum(o.QuantityProduct) as qty, c.name as nameCategory
-FROM orderProducts o, product p, category c
- where (o.idProduct = p.id)and (c.id = p.idCategory) 
+FROM orderProducts o
+join product p
+on (o.idProduct = p.id)
+join category c
+ on (c.id = p.idCategory) 
  GROUP BY nameProduct
  ORDER BY qty desc ) x group by nameCategory;
 END//
