@@ -1,4 +1,35 @@
 delimiter //
+/* addProduct */
+drop procedure `addProduct` ;//
+CREATE PROCEDURE `addProduct`(IN paramName varchar(10), IN paramIdCategory INT, IN paramPrice INT) MODIFIES SQL DATA
+    BEGIN
+   insert into product (name, idCategory, price) values (paramName, paramIdCategory, paramPrice);
+    END//
+
+/* addOrder */
+drop procedure `addOrder` ;//
+ CREATE PROCEDURE `addOrder`(IN paramIdCustomer INT, IN paramDate Date)
+ MODIFIES SQL DATA
+    BEGIN
+   insert into orders (idCustomer, date) values (paramIdCustomer, paramDate);
+    END//
+
+/* addCustomer */
+drop procedure `addCustomer` ;//
+ CREATE PROCEDURE `addCustomer`(IN paramName varchar(20))
+ MODIFIES SQL DATA
+    BEGIN
+   insert into customer (name) values (paramName);
+    END//
+
+/* addOrderProduct */
+drop procedure `addOrderProduct` ;//
+ CREATE PROCEDURE `addOrderProduct`(IN paramIdOrder INT, IN paramIdProduct  INT, IN paramQuantity INT)
+ MODIFIES SQL DATA
+    BEGIN
+   insert into orderProducts (IdOrder, IdProduct, QuantityProduct) values (paramIdOrder,  paramIdProduct, paramQuantity);
+    END//
+
 /* 1 selectOrderByCustomerName*/
 drop  PROCEDURE selectOrderByCustomerName;//
 CREATE PROCEDURE `selectOrderByCustomerName`(IN paramName varchar(20))

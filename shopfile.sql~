@@ -5,15 +5,6 @@ create table orderProducts(idOrder INT, idProduct INT, QuantityProduct INT);
 alter table orderProducts add foreign key (idOrder) references orders(id);
 alter table orderProducts add foreign key (idProduct) references product(id);
 Foreign key (idProduct) references product(id), 
-alter table orderProducts DROP PRIMARY KEY, ADD PRIMARY KEY (idOrder, idProduct);
-
-delimiter //
-
-mysqldump -u root -p masterkey shop > dump.sql
-mysql -u root -p shop < createQueryProcedure.sql
-
-mysql -u root -p shop < c:\SD\addOrderProducts.sql
-mysqldump --no-data -u root -p shop > shopNoData.sql
 
  CREATE PROCEDURE `addProduct`(IN paramName varchar(10), IN paramIdCategory INT, IN paramPrice INT) MODIFIES SQL DATA
     BEGIN
@@ -41,15 +32,9 @@ mysqldump --no-data -u root -p shop > shopNoData.sql
    insert into orderProducts (IdOrder, IdProduct, QuantityProduct) values (paramIdOrder,  paramIdProduct, paramQuantity);
     END//
 
-alter table customer
-RENAME TABLE customer TO customerCC;
+delimiter //
 
-alter table product change name name varchar(20) not null
+mysqldump -u root -p masterkey shop > dump.sql
 
-alter table product change idCategory idCategory INT not null;
-alter table product change price price INT not null;
-
-alter table product change date date DATE not null;
-
-alter table product change QuantityProduct QuantityProduct INT not null;
-
+mysql -u root -p shop < c:\SD\addOrderProducts.sql
+mysqldump --no-data -u root -p shop > shopNoData.sql
