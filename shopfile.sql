@@ -24,7 +24,9 @@ Foreign key (idProduct) references product(id),
    insert into customer (name) values (paramName);
     END//
 
- CREATE PROCEDURE `addOrderProduct`(IN paramIdOrder INT, IN paramIdProduct INT, IN paramQuantity INT)
+ CREATE PROCEDURE `addOrderProduct`(IN paramIdOrder INT,
+									 IN paramIdProduct INT, 
+									 IN paramQuantity INT)
  MODIFIES SQL DATA
     BEGIN
    insert into orderProducts (IdOrder, IdProduct, QuantityProduct) values (paramIdOrder,  paramIdProduct, paramQuantity);
@@ -33,4 +35,6 @@ Foreign key (idProduct) references product(id),
 delimiter //
 
 mysqldump -u root -p masterkey shop > dump.sql
+
+mysql -u root -p shop < c:\SD\addOrderProducts.sql
 mysqldump --no-data -u root -p shop > shopNoData.sql
