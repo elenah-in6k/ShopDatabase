@@ -69,7 +69,27 @@ LIMIT 1;
 
 /* 7 countOrderTotalCost */
 CREATE PROCEDURE `countOrderTotalCost`(IN paramIdOrder INT)
-select o.id, o.date, sum(p.price*oP.QuantityProduct) as summm
+begin
+select o.id, o.date, sum(p.price*oP.QuantityProduct*1.1) as summm
 from orders o, product p, orderProducts oP
 where  (p.id = oP.idProduct) and (o.id = oP.idOrder) and (o.id=paramIdOrder);  END//
-	delimiter ;
+
+/* 8 addOrderProductNew */	
+ CREATE PROCEDURE `addOrderProductNew`(IN paramProductName varchar(20), IN paramQuantity INT)
+ MODIFIES SQL DATA
+    BEGIN
+	DECLARE paramIdOrder INT;
+	DECLARE paramIdProduct INT;
+set paramIdOrder = (SELECT id FROM `orders` ORDER BY `id` DESC LIMIT 1);
+set paramIdProduct = (select id from `product` where name = paramProductName);
+
+if exists (select idOrder, idProduct from orderProducts where (idOrder = paramIdOrder) and (idProduct = paramIdProduct))
+Then
+update orderProducts set QuantityProduct = (QuantityProduct + paramQuantity) where (idOrder = paramIdOrder) and (idProduct = paramIdProduct);
+else
+
+ insert into orderProducts (IdOrder, IdProduct, QuantityProduct) values (paramIdOrder,  paramIdProduct, paramQuantity);
+END IF;
+   
+    END//
+delimiter ;
