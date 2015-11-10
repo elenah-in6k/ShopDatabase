@@ -1,5 +1,6 @@
 delimiter //
 /* 1 selectOrderByCustomerName*/
+drop  PROCEDURE selectOrderByCustomerName;//
 CREATE PROCEDURE `selectOrderByCustomerName`(IN paramName varchar(20))
     BEGIN
 select * from orders o, customer c 
@@ -7,12 +8,15 @@ where (o.idCustomer = c.id) and (c.name =paramName);
     END//
 
 /* 2 selectProductByOrderId*/
+drop  PROCEDURE selectProductByOrderId;//
 CREATE PROCEDURE `selectProductByOrderId`(IN paramIdOrder INT)
     BEGIN
 select o.idOrder, o.idProduct, p.name, o.QuantityProduct 
 from orderProducts o, product p where (p.id = o.idProduct) and (o.idOrder = paramIdOrder);
     END//
+
 /* 3 Top 3*/	
+drop  PROCEDURE `selectTop3ProductInOrderSum`;//
 CREATE PROCEDURE `selectTop3ProductInOrderSum`()
     BEGIN
 SELECT  o.idProduct, p.name, sum(o.QuantityProduct) as qty
@@ -22,7 +26,8 @@ GROUP BY o.idProduct
 ORDER BY sum(o.QuantityProduct) desc
 LIMIT 3;
     END//
-	
+
+drop  PROCEDURE `selectTop3ProductInOrderCount`;//	
 CREATE PROCEDURE `selectTop3ProductInOrderCount`()
     BEGIN
 SELECT  o.idProduct, p.name, count(o.QuantityProduct) as qty
@@ -34,9 +39,10 @@ LIMIT 3;
     END//
 	
 /* 4 selectProductByCategory*/
+drop PROCEDURE `selectProductByCategory`;//
 CREATE PROCEDURE `selectProductByCategory`(IN paramName varchar(20))
     BEGIN
-select p.name, c.name
+select p.name as product_name, c.name as category_name
 from product p
 left Join category c
 on p.idCategory = c.id
@@ -44,6 +50,7 @@ where c.name = paramName;
  END//
 
 /* 5 selectPopularProductInEachCategory */	
+drop PROCEDURE `selectPopularProductInEachCategory`;//
 CREATE PROCEDURE `selectPopularProductInEachCategory`()
     BEGIN
 select * 
@@ -56,6 +63,7 @@ FROM orderProducts o, product p, category c
 END//
 
 /* 6 selectPopularProductInMonth*/
+drop PROCEDURE `selectPopularProductInMonth`;//
 CREATE PROCEDURE `selectPopularProductInMonth`(IN paramYear INT, IN paramMonth INT)
     BEGIN
 SELECT  o.idProduct, p.name, sum(o.QuantityProduct) as qty
@@ -68,6 +76,7 @@ LIMIT 1;
  END//
 
 /* 7 countOrderTotalCost */
+drop PROCEDURE `countOrderTotalCost`;//
 CREATE PROCEDURE `countOrderTotalCost`(IN paramIdOrder INT)
 begin
 select o.id, o.date, sum(p.price*oP.QuantityProduct*1.1) as summm
@@ -75,6 +84,7 @@ from orders o, product p, orderProducts oP
 where  (p.id = oP.idProduct) and (o.id = oP.idOrder) and (o.id=paramIdOrder);  END//
 
 /* 8 addOrderProductNew */	
+drop PROCEDURE `addOrderProductNew`;//
  CREATE PROCEDURE `addOrderProductNew`(IN paramProductName varchar(20), IN paramQuantity INT)
  MODIFIES SQL DATA
     BEGIN
