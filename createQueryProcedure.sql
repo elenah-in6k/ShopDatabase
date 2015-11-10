@@ -57,4 +57,15 @@ select o.id, o.date, sum(p.price*oP.QuantityProduct) as summm
 from orders o, product p, orderProducts oP
 where  (p.id = oP.idProduct) and (o.id = oP.idOrder) and (o.id=paramIdOrder);  END//
 	
+CREATE PROCEDURE `selectPopularProductInEachCategory`()
+    BEGIN
+select * 
+from(
+SELECT p.id as idProduct, p.name as nameProduct, sum(o.QuantityProduct) as qty, c.name as nameCategory
+FROM orderProducts o, product p, category c
+ where (o.idProduct = p.id)and (c.id = p.idCategory) 
+ GROUP BY nameProduct
+ ORDER BY qty desc ) x group by nameCategory;
+
+END//
 	delimiter ;
